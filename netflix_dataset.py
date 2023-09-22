@@ -15,13 +15,13 @@ rating_counts = df['rating'].value_counts()
 director_counts = df['director'].value_counts().head(10)  
 release_year_counts = df['release_year'].value_counts()
 
+#criação dos gráficos e das tabelas
 content_type_counts.plot(kind='pie', autopct='%1.1f%%')
 plt.axis('equal')
 plt.title('Distribuição de conteúdo(filmes/shows de TV)')
 plt.show()
 content_type_df = pd.DataFrame({'Content Type': content_type_counts.index, '': content_type_counts.values})
 content_type_df.to_csv('content_distribution.csv', index=False)
-
 
 top_countries = country_counts.head(10)
 top_countries.plot(kind='bar')
