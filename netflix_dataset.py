@@ -3,56 +3,61 @@ import matplotlib.pyplot as plt
 
 df = pd.read_csv('netflix_titles.csv')
 
-# carregamento e limpeza de dados
+# carregamento e limpeza de dados (remover valores nulos)
 df.dropna(inplace=True)
 
+#converte date_added para o formato de dia/mes/ano
 df['date_added'] = pd.to_datetime(df['date_added'], format='%B %d, %Y', errors='coerce')
 
-#análise exploratória de dados
-content_type_counts = df['type'].value_counts()
-country_counts = df['country'].value_counts()
-rating_counts = df['rating'].value_counts()
-director_counts = df['director'].value_counts().head(10)  
-release_year_counts = df['release_year'].value_counts()
+#análise exploratória de dados (conta as informações utilizadas pra os graficos/tabelas)
+tipo_conteudo = df['type'].value_counts()
+paises = df['country'].value_counts()
+classficação = df['rating'].value_counts()
+diretores = df['director'].value_counts().head(10)  
+ano_lançamento = df['release_year'].value_counts()
 
-#criação dos gráficos e das tabelas
-content_type_counts.plot(kind='pie', autopct='%1.1f%%')
+#criação dos gráficos e tabelas
+#gráfico de pizza
+tipo_conteudo.plot(kind='pie', autopct='%1.1f%%')
 plt.axis('equal')
 plt.title('Distribuição de conteúdo(filmes/shows de TV)')
 plt.show()
-content_type_df = pd.DataFrame({'Content Type': content_type_counts.index, '': content_type_counts.values})
-content_type_df.to_csv('content_distribution.csv', index=False)
+#converte em um df para converter em csv
+tipo_conteudo_df = pd.DataFrame({'Tipo de conteudo': tipo_conteudo.index, '': tipo_conteudo.values})
+tipo_conteudo_df.to_csv('tipo_conteudo.csv', index=False)
 
-top_countries = country_counts.head(10)
-top_countries.plot(kind='bar')
+top_paises = paises.head(10)
+#gráfico de barras
+top_paises.plot(kind='bar')
 plt.xlabel('País de origem')
 plt.ylabel('Quantidade de conteúdo')
 plt.title('Top 10 Países de origem com mais conteúdo')
 plt.show()
-top_countries_df = pd.DataFrame({'Country': top_countries.index, 'Count': top_countries.values})
-top_countries_df.to_csv('top_countries.csv', index=False)
+top_paises_df = pd.DataFrame({'País': top_paises.index, 'Quantidade': top_paises.values})
+top_paises_df.to_csv('top_paises.csv', index=False)
 
-rating_counts.plot(kind='bar')
+classficação.plot(kind='bar')
 plt.xlabel('Classificação')
 plt.ylabel('Quantidade de conteúdo')
 plt.title('Classificações de conteúdo')
 plt.show()
-rating_df = pd.DataFrame({'Rating': rating_counts.index, 'Count': rating_counts.values})
-rating_df.to_csv('rating_distribution.csv', index=False)
+classficação_df = pd.DataFrame({'Classificação': classficação.index, 'Quantidade': classficação.values})
+classficação_df.to_csv('classficação.csv', index=False)
 
-director_counts.plot(kind='bar')
+diretores.plot(kind='bar')
 plt.xlabel('Diretor')
 plt.ylabel('Quantidade de títulos')
 plt.title('Diretores mais prolíficos na netflix')
+#girar os nomes
 plt.xticks(rotation=45)  
 plt.show()
-director_counts_df = pd.DataFrame({'Director': director_counts.index, 'Count': director_counts.values})
-director_counts_df.to_csv('director_counts.csv', index=False)
+diretores_df = pd.DataFrame({'Diretores': diretores.index, 'Quantidade': diretores.values})
+diretores_df.to_csv('diretores.csv', index=False)
 
-release_year_counts.sort_index().plot(kind='bar', figsize=(12, 6))
+ano_lançamento.sort_index().plot(kind='bar', figsize=(12, 6)) #auemntar o tamanho do gráfico
 plt.xlabel('Ano de Lançamento')
 plt.ylabel('Quantidade de conteúdo')
 plt.title('Distribuição de ano de lançamento')
 plt.show()
-release_year_counts_df = pd.DataFrame({'Release Year': release_year_counts.index, 'Count': release_year_counts.values})
-release_year_counts_df.to_csv('release_year_distribution.csv', index=False, header=['Release Year', 'Count'])
+ano_lançamento_df = pd.DataFrame({'Ano de lançamento': ano_lançamento.index, 'Quantidade': ano_lançamento.values})
+ano_lançamento_df.to_csv('ano_lançamento.csv', index=False, header=['Ano de lançamento', 'Quantidade'])
